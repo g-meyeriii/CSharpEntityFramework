@@ -9,22 +9,51 @@ namespace CSharpEntityFramework {
 
         static void Main(string[] args) {
             var context = new AppDbContext();
-           // UpdateCustomers(context);
-            //AddCustomer(context);
 
-            // GetCustomerByPk(context);
+            RecalcOrderAmount(3, context);
+            //UpdateCustomers(context);
+            //AddCustomer(context);
+            //GetCustomerByPk(context);
             //UpdateCustomers(context);
             //DeleteCustomer(context);
-           // GetAllCustomers(context);
+            //GetAllCustomers(context);
             //AddOrder(context);
-           AddProducts(context);
-           
-            Console.WriteLine($"Avg price is {context.Products.Average(x => x.Price)}");
+            //(context);
+            // AddOrderline(context);
 
-            var top2 = context.Products.Where(x => x.Id > 7).ToList();
+            //GetOrderlines(context);
+            //Console.WriteLine($"Avg price is {context.Products.Average(x => x.Price)}");
 
-            var actCust = context.Customers.Where(x => x.Active).ToList();
+            //var top2 = context.Products.Where(x => x.Id > 7).ToList();
+
+            //var actCust = context.Customers.Where(x => x.Active).ToList();
         }
+
+        
+        //static void GetOrderlines(AppDbContext context) {
+        //    var orderlines = context.Orderlines.ToList();
+        //    orderlines.ForEach(line => Console.WriteLine($"{line.Quantity}|{line.Order.Description}| {line.Product.Name}")); //Lamda for foreach loop
+
+        //static void AddOrderline(AppDbContext context) {
+        //    var order = context.Orders.SingleOrDefault(o => o.Description == "Order 5");
+        //    var product = context.Products.SingleOrDefault(p => p.Code == "Shovel");
+        //    var orderline = new Orderline {
+        //        Id = 0, ProductId = product.Id, OrderId = order.Id, Quantity = 3
+        //    };
+        //    context.Orderlines.Add(orderline);
+        //    var rowsAffecte = context.SaveChanges();
+        //    if (rowsAffecte != 1) throw new Exception("Orderline Failed");
+        //}
+
+        static void RecalcOrderAmount(int orderId, AppDbContext context) {//study this part for Capstone
+            var order = context.Orders.Find(orderId);
+            var total = context.Orderlines.Sum(ol => ol.Quantity * ol.Product.Price);
+            order.Amount = total;
+            var rc = context.SaveChanges();
+            if (rc != 1) throw new Exception("Order update of amount failed");
+            
+        }
+
         static void UpdateCustomerSales(AppDbContext context) { //know  this syntax
             var CusOrdJoin = from c in context.Customers //if the var is not referenced not execute
                              join o in context.Orders
@@ -94,8 +123,8 @@ namespace CSharpEntityFramework {
         static void AddOrder(AppDbContext context) {
             var ord = new Order {
                 Id = 0,
-                Description = "N/A",
-                Amount = 500,
+                Description = "Shovel",
+                Amount = 600,
                 CustomerId = 5
             };
             context.Orders.Add(ord);
@@ -104,18 +133,20 @@ namespace CSharpEntityFramework {
             return;
         }
         static void AddProducts(AppDbContext context) {
-            var product1 = new Product { Id = 0, Code = "Echo", Name = "Echo", Price = 100 };
-            var product2 = new Product { Id = 0, Code = "Book", Name = "Best Book", Price = 200 };
-            var product3 = new Product { Id = 0, Code = "Tablet", Name = "Kindle", Price = 300 };
-            var product4 = new Product { Id = 0, Code = "Kitchen", Name = "InstaPot", Price = 400 };
-            var product5 = new Product { Id = 0, Code = "Clothig", Name = "Dress", Price = 500 };
-            context.Products.Add(product1);
-            context.Products.Add(product2);
-            context.Products.Add(product3);
-            context.Products.Add(product4);
-            context.Products.Add(product5);
+            var product6 = new Product {  Id = 0, Code = "Shovel", Name = "Snow Shovel", Price = 600 };
+            //var product1 = new Product { Id = 0, Code = "Echo", Name = "Echo", Price = 100 };
+            //var product2 = new Product { Id = 0, Code = "Book", Name = "Best Book", Price = 200 };
+            //var product3 = new Product { Id = 0, Code = "Tablet", Name = "Kindle", Price = 300 };
+            //var product4 = new Product { Id = 0, Code = "Kitchen", Name = "InstaPot", Price = 400 };
+            //var product5 = new Product { Id = 0, Code = "Clothig", Name = "Dress", Price = 500 };
+            //context.Products.Add(product1);
+            //context.Products.Add(product2);
+            //context.Products.Add(product3);
+            //context.Products.Add(product4);
+            //context.Products.Add(product5);
+            context.Products.Add(product6);
             var rowsAffected = context.SaveChanges();
-            if (rowsAffected != 5) throw new Exception("Add Products failes");
+            if (rowsAffected != 1) throw new Exception("Add Products failes");
             return;
         
         }

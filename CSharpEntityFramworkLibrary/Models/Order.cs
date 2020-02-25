@@ -15,7 +15,11 @@ namespace CSharpEntityFramworkLibrary.Models {
         public  virtual Customer Customer { get; set; }// Virtual tells EF not to make this property part of table
 
         public override string ToString() => $"{Id}|{Description}|{Amount}|{CustomerId}";
+        
+        public virtual List<Orderline> OrderLines { get; set; }
+
         public Order() { }
         
     }
+
 }

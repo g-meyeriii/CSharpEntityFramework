@@ -14,6 +14,9 @@ namespace CSharpEntityFramworkLibrary.Models {
         public string Name { get; set; }
         public double Price { get; set; }
 
+        public virtual List<Orderline> Orderlines { get; set; }
+
+
         public override string ToString() => $"{Id}|{Code}|{Name}|{Price}";
         public Product() { }
     }
