@@ -1,8 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CSharpEntityFramworkLibrary.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace CSharpEntityFramworkLibrary {
     public class AppDbContext : DbContext {
+
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+
+
         public AppDbContext() { }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -13,6 +20,16 @@ namespace CSharpEntityFramworkLibrary {
                 builder.UseSqlServer(connStr);
             }
         }
+        protected override void OnModelCreating(ModelBuilder model) { //this replaces the the attributes that were on the product class 
+            model.Entity<Product>(e => {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Code).HasMaxLength(10).IsRequired();
+                e.Property(x => x.Name).HasMaxLength(30).IsRequired();
+                e.Property(x => x.Price);
+                e.HasIndex(x => x.Code).IsUnique();
+            });
+        }  // model.Entity<Customer>(e => {
+          //  )
         
     }
 }
